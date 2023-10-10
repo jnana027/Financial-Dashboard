@@ -1,0 +1,41 @@
+First, we import the financial table by using the "Get Data" option and load that data into Power Query. After that, we clean the data in Power Query using various options.
+
+1.Start by importing the financial table using the "Get Data" option.
+2.Load the imported data into Power Query.
+3.Proceed to clean the data within Power Query using a range of available options and functions.
+
+
+logomakr.com side is used for downloading the visuals.
+
+Date table:
+Calender = 
+ADDCOLUMNS(
+    CALENDARAUTO(),
+    "Year",YEAR([Date]),
+    "Month",FORMAT([Date],"mmm"),
+    "MonthNumber",MONTH([Date]),
+    "Weekday",FORMAT([Date],"ddd"),
+    "WeekNumber",WEEKDAY([Date]),
+    "Qtr",FORMAT([Date],"\QQ"
+))
+
+KPI:
+1.# Transaction = COUNTROWS(financials)
+2.Canada Trans = CALCULATE([# Transaction],financials[Country]="Canada")
+3.COGS = SUMX(financials,financials[Units Sold]*financials[Manufacturing Price])
+4.Gross sales = SUMX(financials,financials[Units Sold]*financials[Sale Price])
+5.Net sales = [Gross sales]-[Total discount]
+
+6.Profit Negative = 
+var vprofit=[Total Profit]
+var vresult=IF(vprofit<0,vprofit,0)
+return vresult
+
+7.Profit Positive = 
+var vprofit=[Total Profit]
+var vresult=IF(vprofit>0,vprofit,0)
+return vresult
+
+8.Total discount = SUM(financials[Discounts])
+
+9.Total Profit = [Net sales]-[COGS]
